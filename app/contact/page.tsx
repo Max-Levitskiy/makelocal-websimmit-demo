@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Get in Touch</h1>
           <p className="text-xl text-emerald-100">
-            We'd love to hear from you
+            We&apos;d love to hear from you
           </p>
         </div>
       </section>
@@ -53,7 +54,7 @@ export default function ContactPage() {
               <h2 className="text-3xl font-bold mb-6">Contact Information</h2>
               <p className="text-gray-600 mb-8">
                 Have questions about MakeLocal? Want to become a producer or coordinator? 
-                We're here to help!
+                We&apos;re here to help!
               </p>
 
               <div className="space-y-6">
@@ -102,18 +103,18 @@ export default function ContactPage() {
               <div className="mt-12">
                 <h3 className="font-bold text-xl mb-4">Quick Links</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <a href="/" className="text-emerald-600 hover:underline">
+                  <Link href="/" className="text-emerald-600 hover:underline">
                     Product Catalog
-                  </a>
-                  <a href="/how-it-works" className="text-emerald-600 hover:underline">
+                  </Link>
+                  <Link href="/how-it-works" className="text-emerald-600 hover:underline">
                     How It Works
-                  </a>
-                  <a href="/roles" className="text-emerald-600 hover:underline">
+                  </Link>
+                  <Link href="/roles" className="text-emerald-600 hover:underline">
                     Platform Roles
-                  </a>
-                  <a href="/for-coordinators" className="text-emerald-600 hover:underline">
+                  </Link>
+                  <Link href="/for-coordinators" className="text-emerald-600 hover:underline">
                     Become a Coordinator
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -147,7 +148,7 @@ export default function ContactPage() {
                     <div className="text-6xl mb-4">✅</div>
                     <h3 className="text-2xl font-bold text-emerald-600 mb-2">Message Sent!</h3>
                     <p className="text-gray-600">
-                      Thank you for reaching out. We'll get back to you as soon as possible.
+                      Thank you for reaching out. We&apos;ll get back to you as soon as possible.
                     </p>
                   </div>
                 ) : (
@@ -234,28 +235,28 @@ export default function ContactPage() {
             <div className="border border-gray-200 rounded-lg p-6">
               <h3 className="font-bold text-lg mb-2">How do I become a producer on MakeLocal?</h3>
               <p className="text-gray-600">
-                Contact us using the form above with "Become a Producer" as the subject. We'll guide you through the onboarding process and help you list your products.
+                Contact us using the form above with &quot;Become a Producer&quot; as the subject. We&apos;ll guide you through the onboarding process and help you list your products.
               </p>
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
               <h3 className="font-bold text-lg mb-2">What areas do you currently serve?</h3>
               <p className="text-gray-600">
-                We're currently active in the Pacific Northwest, with plans to expand to other regions. Check our catalog to see if we deliver to your area.
+                We&apos;re currently active in the Pacific Northwest, with plans to expand to other regions. Check our catalog to see if we deliver to your area.
               </p>
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
               <h3 className="font-bold text-lg mb-2">How does the coordinator program work?</h3>
               <p className="text-gray-600">
-                Visit our <a href="/for-coordinators" className="text-emerald-600 hover:underline">Coordinators page</a> to learn more about the program, benefits, and how to apply.
+                Visit our <Link href="/for-coordinators" className="text-emerald-600 hover:underline">Coordinators page</Link> to learn more about the program, benefits, and how to apply.
               </p>
             </div>
 
             <div className="border border-gray-200 rounded-lg p-6">
               <h3 className="font-bold text-lg mb-2">What is your return policy?</h3>
               <p className="text-gray-600">
-                We work with coordinators and producers to ensure satisfaction. If there's an issue with your order, contact your coordinator or reach out to us directly within 24 hours of delivery.
+                We work with coordinators and producers to ensure satisfaction. If there&apos;s an issue with your order, contact your coordinator or reach out to us directly within 24 hours of delivery.
               </p>
             </div>
           </div>

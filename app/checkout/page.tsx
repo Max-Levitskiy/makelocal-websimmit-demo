@@ -153,7 +153,7 @@ export default function CheckoutPage() {
               <div className="mt-6 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
                 <h3 className="font-semibold text-emerald-800 mb-2">🚚 Group Delivery Info</h3>
                 <p className="text-sm text-gray-700">
-                  Your order will be part of Friday's coordinated delivery to your neighborhood. 
+                  Your order will be part of Friday&apos;s coordinated delivery to your neighborhood. 
                   Coordinator: Sarah Johnson
                 </p>
                 <p className="text-sm text-gray-600 mt-2">

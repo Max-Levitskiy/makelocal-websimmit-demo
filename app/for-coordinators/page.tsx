@@ -234,7 +234,7 @@ export default function ForCoordinatorsPage() {
                 <div className="text-6xl mb-4">✅</div>
                 <h3 className="text-2xl font-bold text-emerald-600 mb-2">Application Submitted!</h3>
                 <p className="text-gray-600">
-                  Thank you for your interest. We'll review your application and get back to you within 2-3 business days.
+                  Thank you for your interest. We&apos;ll review your application and get back to you within 2-3 business days.
                 </p>
               </div>
             ) : (
@@ -396,13 +396,13 @@ export default function ForCoordinatorsPage() {
                   <div className="space-y-3">
                     <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
                       <p className="text-sm italic mb-2">
-                        "I've been coordinating for 6 months and love being a connector in my community while earning extra income!"
+                        &quot;I&apos;ve been coordinating for 6 months and love being a connector in my community while earning extra income!&quot;
                       </p>
                       <p className="text-xs font-semibold">- Maria R., Portland</p>
                     </div>
                     <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
                       <p className="text-sm italic mb-2">
-                        "Started part-time, now I coordinate full-time. Best decision I've made!"
+                        &quot;Started part-time, now I coordinate full-time. Best decision I&apos;ve made!&quot;
                       </p>
                       <p className="text-xs font-semibold">- James T., Seattle</p>
                     </div>

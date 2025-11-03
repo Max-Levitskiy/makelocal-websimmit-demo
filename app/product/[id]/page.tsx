@@ -4,7 +4,21 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
 
-const productsData: { [key: string]: any } = {
+interface ProductData {
+  id: string;
+  name: string;
+  producer: string;
+  price: number;
+  image: string;
+  description: string;
+  category: string;
+  fullDescription: string;
+  producerInfo: string;
+  availability: string;
+  personalizationOptions: string[];
+}
+
+const productsData: { [key: string]: ProductData } = {
   '1': {
     id: '1',
     name: 'Organic Honey',
@@ -201,7 +215,7 @@ export default function ProductPage() {
               {/* Coordinator Note */}
               <div className="mt-6 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
                 <p className="text-sm text-gray-700">
-                  <span className="font-semibold">💡 Local Coordinator:</span> This product will be included in Friday's group delivery to your neighborhood.
+                  <span className="font-semibold">💡 Local Coordinator:</span> This product will be included in Friday&apos;s group delivery to your neighborhood.
                 </p>
               </div>
             </div>

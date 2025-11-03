@@ -267,7 +267,7 @@ export default function RolesPage() {
             Find Your Role in MakeLocal
           </h2>
           <p className="text-xl mb-8 text-emerald-100">
-            Whether you're a customer, coordinator, or producer, there's a place for you
+            Whether you&apos;re a customer, coordinator, or producer, there&apos;s a place for you
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/" className="bg-white text-emerald-600 px-8 py-3 rounded-full font-semibold hover:bg-emerald-50 transition-colors text-lg">
