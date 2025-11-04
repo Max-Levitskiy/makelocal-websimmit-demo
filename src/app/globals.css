@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* Light mode colors */
+  --background-light: #f5f7f8;
+  --background-dark: #101a22;
+  --primary: #259df4;
+  --electric-accent: #25f4a2;
+
+  /* Default to light mode */
+  --background: var(--background-light);
+  --foreground: #0f172a; /* slate-900 */
+  --muted-foreground: #475569; /* slate-600 */
+  --border: #e2e8f0; /* slate-200 */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --secondary: #f1f5f9; /* slate-100 */
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --ring: var(--primary);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  /* Colors */
+  --color-primary: var(--primary);
+  --color-electric-accent: var(--electric-accent);
+  --color-background-light: var(--background-light);
+  --color-background-dark: var(--background-dark);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+
+  /* Typography */
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+.dark {
+  --background: var(--background-dark);
+  --foreground: #ffffff;
+  --muted-foreground: #94a3b8; /* slate-400 */
+  --border: #1e293b; /* slate-800 */
+  --card: #0f172a; /* slate-900 */
+  --card-foreground: #ffffff;
+  --popover: #0f172a;
+  --popover-foreground: #ffffff;
+  --secondary: #1e293b; /* slate-800 */
+  --secondary-foreground: #ffffff;
+  --muted: #1e293b;
+  --accent: #1e293b;
+  --accent-foreground: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  min-height: 100dvh;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: var(--radius-full);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Backdrop blur utility enhancement */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
