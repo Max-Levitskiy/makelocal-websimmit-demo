@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -21,12 +22,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <link rel="manifest" href="/manifest.json" />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
           rel="stylesheet"
         />
       </head>
       <body className={`${plusJakartaSans.variable} antialiased`}>
+        <ServiceWorkerRegistration />
         {children}
       </body>
     </html>

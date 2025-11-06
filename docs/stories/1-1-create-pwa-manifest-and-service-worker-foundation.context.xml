@@ -1,0 +1,156 @@
+<story-context id="bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.1</storyId>
+    <title>Create PWA Manifest and Service Worker Foundation</title>
+    <status>drafted</status>
+    <generatedAt>2025-01-27</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/stories/1-1-create-pwa-manifest-and-service-worker-foundation.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>booth staff member</asA>
+    <iWant>the microsite to be installable as a PWA</iWant>
+    <soThat>visitors can add it to their home screen for quick re-entry during the event</soThat>
+    <tasks>
+      <task id="1" acs="1,5,6">Create PWA manifest.json file
+        - Create `public/manifest.json` with required fields: name, short_name, icons array, start_url, display mode
+        - Set theme_color to `#259df4` (MakeLocal primary brand color from STYLEGUIDE.md)
+        - Configure icons array with 192x192 and 512x512 sizes (placeholder icons acceptable initially)
+        - Set display mode to "standalone" or "minimal-ui" for PWA install experience
+        - Test manifest.json validates against PWA manifest schema
+      </task>
+      <task id="2" acs="2">Create service worker file with basic lifecycle
+        - Create `public/sw.js` with install event handler
+        - Create `public/sw.js` with activate event handler for cache cleanup
+        - Implement basic fetch event handler (can be minimal for Story 1.1, caching logic deferred to Story 1.2)
+        - Add cache version constant for future cache invalidation
+        - Test service worker file syntax and basic structure
+      </task>
+      <task id="3" acs="3">Register service worker on app initialization
+        - Create service worker registration utility in `src/lib/register-sw.ts` or integrate into `src/app/layout.tsx`
+        - Check for service worker support (`'serviceWorker' in navigator`)
+        - Register service worker with `navigator.serviceWorker.register('/sw.js')`
+        - Handle registration promise (success/error logging)
+        - Verify service worker registration in browser DevTools
+      </task>
+      <task id="4" acs="4">Enable Add to Home Screen prompt
+        - Ensure manifest.json is linked in `src/app/layout.tsx` via `<link rel="manifest">`
+        - Test install prompt appears on Android Chrome after user engagement
+        - Document iOS Safari manual installation instructions (iOS requires user-initiated share menu)
+        - Test PWA installs correctly and launches in standalone mode
+      </task>
+      <task id="5" acs="1,2,3,4,5,6">Testing and validation
+        - Verify manifest.json exists and contains all required fields
+        - Verify service worker file exists and registers without errors
+        - Test service worker registration in browser console (`navigator.serviceWorker.controller`)
+        - Verify icons exist at specified paths and sizes
+        - Test Add to Home Screen prompt on mobile device (Android Chrome)
+        - Verify theme color matches brand (`#259df4`)
+        - Test PWA installs and launches correctly
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <ac id="1">`manifest.json` file exists with required fields (name, short_name, icons, start_url, display mode)</ac>
+    <ac id="2">Service worker file created with basic registration logic</ac>
+    <ac id="3">Service worker registers successfully on page load</ac>
+    <ac id="4">Add to Home Screen prompt appears on mobile devices after engagement</ac>
+    <ac id="5">Icons provided in multiple sizes (192x192, 512x512 minimum)</ac>
+    <ac id="6">Theme color matches MakeLocal brand colors</ac>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/tech-spec-epic-1.md" title="Epic Technical Specification: Foundation & Infrastructure" section="Services and Modules">
+        Module locations and responsibilities for PWA infrastructure. Service Worker at `public/sw.js`, PWA Manifest at `public/manifest.json`, Service Worker Registration in `src/app/layout.tsx` or `src/app/register-sw.ts`.
+      </doc>
+      <doc path="docs/tech-spec-epic-1.md" title="Epic Technical Specification: Foundation & Infrastructure" section="APIs and Interfaces">
+        Service Worker API patterns including install/activate event handlers, fetch event handler patterns, and registration flow.
+      </doc>
+      <doc path="docs/tech-spec-epic-1.md" title="Epic Technical Specification: Foundation & Infrastructure" section="Workflows and Sequencing">
+        Service Worker Registration Flow (steps 1-9): App initialization → Check support → Register → Install → Pre-cache → Activate → Cleanup → Ready → Fetch interception.
+      </doc>
+      <doc path="docs/tech-spec-epic-1.md" title="Epic Technical Specification: Foundation & Infrastructure" section="Acceptance Criteria">
+        Story 1.1 acceptance criteria (ACs 1-6) with authoritative requirements for manifest, service worker, registration, install prompt, icons, and theme color.
+      </doc>
+      <doc path="docs/epics.md" title="makelocal-websimmit-demo - Epic Breakdown" section="Epic 1">
+        Story 1.1 user story and acceptance criteria with technical notes on file locations (`public/manifest.json`, `public/sw.js`) and testing guidance for iOS Safari and Android Chrome.
+      </doc>
+      <doc path="docs/prd.md" title="Product Requirements Document - MakeLocal Web Summit Microsite" section="7.9">
+        PRD requirements for installability and offline (FR-32, FR-33): Ship web app manifest and service worker providing offline caching, surface Add to Home Screen prompt.
+      </doc>
+      <doc path="docs/architecture.md" title="Architecture Overview">
+        Next.js 16 App Router architecture, single-page marketing site pattern. Layout.tsx wires global fonts and theming. Files from `public/` directory served at root URL path.
+      </doc>
+      <doc path="STYLEGUIDE.md" title="MakeLocal Design System Style Guide" section="Color Palette">
+        Primary brand color `#259df4` (bright blue) for theme_color in manifest. Design system tokens and color usage guidelines.
+      </doc>
+    </docs>
+    <code>
+      <file path="src/app/layout.tsx" kind="component" symbol="RootLayout" lines="16-34" reason="Root layout component where service worker registration should be added and manifest link should be included in head section">
+        Current layout includes metadata, font loading, and basic HTML structure. Needs service worker registration code and manifest link.
+      </file>
+      <file path="public/" kind="directory" symbol="public" reason="Directory where manifest.json and sw.js must be created. Next.js serves files from public/ at root URL path">
+        Currently contains SVG icons. Will contain manifest.json and sw.js for this story.
+      </file>
+    </code>
+    <dependencies>
+      <ecosystem name="node">
+        <package name="next" version="16.0.1">Next.js framework with App Router and static export capabilities</package>
+        <package name="react" version="19.2.0">React library compatible with service worker registration APIs</package>
+        <package name="react-dom" version="19.2.0">React DOM for client-side rendering</package>
+        <package name="typescript" version="^5">TypeScript for type-safe service worker registration code</package>
+      </ecosystem>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint>Next.js 16 App Router: Service worker registration must be implemented in `src/app/layout.tsx` or a client component that mounts on app initialization. Service worker must be served from `public/` directory to be accessible at root scope.</constraint>
+    <constraint>Service Worker Scope: Service worker at `public/sw.js` will control all routes under the app domain. Ensure proper scope configuration if subdirectories are used.</constraint>
+    <constraint>PWA Manifest: Must be served from `public/manifest.json` and linked in root layout. Next.js serves files from `public/` directory at root URL path.</constraint>
+    <constraint>React 19.2.0 Compatibility: Service worker registration code should use standard Web APIs (`navigator.serviceWorker`) compatible with React 19.2.0. No React-specific service worker libraries required.</constraint>
+    <constraint>TypeScript Strict Mode: Service worker registration code should include proper TypeScript types. Service worker file (`sw.js`) can be plain JavaScript, but registration utility should be TypeScript.</constraint>
+    <constraint>Theme Color: Must match MakeLocal brand color `#259df4` from STYLEGUIDE.md Color Palette section.</constraint>
+    <constraint>Icon Sizes: Must provide icons in at least 192x192 and 512x512 sizes. Placeholder icons acceptable initially.</constraint>
+    <constraint>Display Mode: Should be "standalone" or "minimal-ui" for optimal PWA install experience.</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface name="Service Worker Registration API" kind="Web API" signature="navigator.serviceWorker.register(scriptURL: string, options?: RegistrationOptions): Promise&lt;ServiceWorkerRegistration&gt;" path="Browser API">
+      Standard Web API for registering service workers. Returns promise that resolves to ServiceWorkerRegistration object.
+    </interface>
+    <interface name="Service Worker Install Event" kind="Event Handler" signature="self.addEventListener('install', (event: ExtendableEvent) => { ... })" path="public/sw.js">
+      Install event handler in service worker for pre-caching critical assets. Event.waitUntil() required for async operations.
+    </interface>
+    <interface name="Service Worker Activate Event" kind="Event Handler" signature="self.addEventListener('activate', (event: ExtendableEvent) => { ... })" path="public/sw.js">
+      Activate event handler for cleaning up old caches. Should delete caches not in current version list.
+    </interface>
+    <interface name="Service Worker Fetch Event" kind="Event Handler" signature="self.addEventListener('fetch', (event: FetchEvent) => { ... })" path="public/sw.js">
+      Fetch event handler for intercepting network requests. Can be minimal for Story 1.1, full caching logic deferred to Story 1.2.
+    </interface>
+    <interface name="PWA Manifest Schema" kind="JSON Schema" signature="{ name: string, short_name: string, icons: Array&lt;{src: string, sizes: string, type: string}&gt;, start_url: string, display: string, theme_color: string }" path="public/manifest.json">
+      Web App Manifest JSON schema with required fields for PWA installability. Must be valid JSON and reference existing icon files.
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Testing should verify PWA manifest validity, service worker registration success, and install prompt appearance. Use browser DevTools for service worker inspection (`navigator.serviceWorker.controller`). Test on both Android Chrome (automatic install prompt) and iOS Safari (manual installation). Validate manifest.json against PWA manifest schema. No specific testing framework required for Story 1.1 - manual testing and browser DevTools sufficient.
+    </standards>
+    <locations>
+      Manual testing via browser DevTools. Service worker can be inspected in Application tab. Manifest validation via browser console or online validators. No test files required for Story 1.1.
+    </locations>
+    <ideas>
+      <test ac="1">Verify manifest.json exists at public/manifest.json and contains all required fields (name, short_name, icons array with at least 192x192 and 512x512, start_url, display mode)</test>
+      <test ac="2">Verify sw.js exists at public/sw.js and contains install and activate event handlers with basic structure</test>
+      <test ac="3">Test service worker registration in browser console: check `navigator.serviceWorker.controller` after page load, verify registration promise resolves without errors</test>
+      <test ac="4">Test Add to Home Screen prompt on Android Chrome device after user engagement (scroll/interaction). Verify prompt appears and PWA installs correctly</test>
+      <test ac="5">Verify icons exist at paths specified in manifest.json icons array, check file sizes match requirements (192x192, 512x512 minimum)</test>
+      <test ac="6">Verify theme_color in manifest.json matches `#259df4` from STYLEGUIDE.md. Check applied theme color in installed PWA</test>
+    </ideas>
+  </tests>
+</story-context>
+

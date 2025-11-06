@@ -1,0 +1,96 @@
+# generated: 2025-11-06 21:45
+# project: makelocal-websimmit-demo
+# project_key: makelocal-websimmit-demo
+# tracking_system: file-system
+# story_location: "{project-root}/docs/stories"
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
+
+generated: 2025-11-06 21:45
+project: makelocal-websimmit-demo
+project_key: makelocal-websimmit-demo
+tracking_system: file-system
+story_location: "{project-root}/docs/stories"
+
+development_status:
+  epic-1: contexted
+  1-1-create-pwa-manifest-and-service-worker-foundation: done
+  1-2-implement-offline-caching-strategy: backlog
+  1-3-add-analytics-instrumentation-offline-first: backlog
+  1-4-create-staff-reset-controls: backlog
+  1-5-implement-performance-optimization: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-build-responsive-hero-section: backlog
+  2-2-create-live-queue-banner-component: backlog
+  2-3-build-product-catalog-grid: backlog
+  2-4-design-product-card-component: backlog
+  2-5-create-product-detail-view: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-build-personalization-form-component: backlog
+  3-2-implement-personalization-option-persistence: backlog
+  3-3-add-estimated-print-time-updates: backlog
+  3-4-create-visual-preview-of-personalized-options: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-implement-cart-storage-and-management: backlog
+  4-2-build-cart-overlay-page-component: backlog
+  4-3-create-checkout-form-with-lead-capture: backlog
+  4-4-integrate-makelocal-order-draft-api: backlog
+  4-5-implement-lead-capture-logging: backlog
+  4-6-create-staff-lead-export-feature: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-create-order-status-explainer-page: backlog
+  5-2-add-pwa-installation-prompt: backlog
+  5-3-implement-fallback-messaging-for-failed-drafts: backlog
+  5-4-stretch-build-order-status-simulation-module: backlog
+  5-5-stretch-create-staff-override-controls-for-simulation: backlog
+  5-6-stretch-sync-live-queue-banner-with-simulation: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-add-coordinator-mode-toggle: backlog
+  6-2-build-coordinator-drawer-with-tabbed-sections: backlog
+  6-3-create-api-mock-data-tables: backlog
+  6-4-add-business-value-messaging: backlog
+  6-5-build-coordinator-lead-form: backlog
+  6-6-create-coordinator-thank-you-state: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-build-how-makelocal-works-section: backlog
+  7-2-create-roles-grid-section: backlog
+  7-3-build-coordinator-pitch-section: backlog
+  7-4-create-contact-section: backlog
+  7-5-externalize-content-to-json-md-files: backlog
+  7-6-add-demo-mode-vs-post-event-mode-toggle: backlog
+  epic-7-retrospective: optional
