@@ -84,16 +84,6 @@ export const useCartStore = create<CartStore>()(
           );
           // Continue without token - fallback to local-only mode
         }
-        // Check if we can add to cart
-        const canAddError = canAddToCart(state as Cart);
-        if (canAddError) {
-          console.error(
-            "[CartStore] Cart validation failed:",
-            canAddError.message,
-          );
-          throw new Error(canAddError.message);
-        }
-
         // Check for duplicate with same configuration
         const duplicate = findDuplicateItem(
           state as Cart,
@@ -104,10 +94,24 @@ export const useCartStore = create<CartStore>()(
         if (duplicate) {
           // Increase quantity of existing item
           const newQuantity = duplicate.quantity + (newItem.quantity || 1);
-          const quantityError = validateQuantity(newQuantity);
 
+          // Validate the new total quantity for this item
+          const quantityError = validateQuantity(newQuantity);
           if (quantityError) {
             throw new Error(quantityError.message);
+          }
+
+          // Check if we can add to cart (only total quantity constraint applies)
+          const canAddError = canAddToCart(
+            state as Cart,
+            newItem.quantity || 1,
+          );
+          if (canAddError) {
+            console.error(
+              "[CartStore] Cart validation failed:",
+              canAddError.message,
+            );
+            throw new Error(canAddError.message);
           }
 
           set({
@@ -119,7 +123,21 @@ export const useCartStore = create<CartStore>()(
             updatedAt: Date.now(),
           });
         } else {
-          // Add new item
+          // Add new item - validate both total quantity and unique items constraints
+          const canAddError = canAddToCart(
+            state as Cart,
+            newItem.quantity || 1,
+            newItem.productId,
+            newItem.customizations as Record<string, unknown>,
+          );
+          if (canAddError) {
+            console.error(
+              "[CartStore] Cart validation failed:",
+              canAddError.message,
+            );
+            throw new Error(canAddError.message);
+          }
+
           const cartItem: CartItem = {
             ...newItem,
             id: crypto.randomUUID(),

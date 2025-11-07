@@ -49,7 +49,7 @@ export function cartItemToCreateDraftRequest(
     quantity: item.quantity,
     productParameters: customizationsToProductParameters(item.customizations),
     urgency: "standard",
-    currency: "PLN",
+    currency: "EUR",
   };
 }
 

@@ -57,6 +57,8 @@ export function getTotalQuantity(cart: Cart): number {
 export function canAddToCart(
   cart: Cart,
   quantityToAdd: number = 1,
+  productId?: string,
+  customizations?: Record<string, unknown>,
 ): CartValidationError | null {
   if (!cart?.items || !Array.isArray(cart.items)) {
     return null; // Empty cart, can add
@@ -72,11 +74,18 @@ export function canAddToCart(
     };
   }
 
-  if (cart.items.length >= CART_CONSTRAINTS.MAX_UNIQUE_ITEMS) {
-    return {
-      code: "TOO_MANY_UNIQUE_ITEMS",
-      message: `Cannot add more distinct products. Maximum ${CART_CONSTRAINTS.MAX_UNIQUE_ITEMS} unique items allowed`,
-    };
+  // Only check unique items constraint when adding a new unique item
+  if (productId && customizations) {
+    const isNewUniqueItem = !findDuplicateItem(cart, productId, customizations);
+    if (
+      isNewUniqueItem &&
+      cart.items.length >= CART_CONSTRAINTS.MAX_UNIQUE_ITEMS
+    ) {
+      return {
+        code: "TOO_MANY_UNIQUE_ITEMS",
+        message: `Cannot add more distinct products. Maximum ${CART_CONSTRAINTS.MAX_UNIQUE_ITEMS} unique items allowed`,
+      };
+    }
   }
 
   return null;
