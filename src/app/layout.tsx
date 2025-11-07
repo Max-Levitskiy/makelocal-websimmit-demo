@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { ClientLayout } from "@/components/shared/ClientLayout";
 import "./globals.css";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
@@ -11,7 +12,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "MakeLocal - Web Summit Demo",
-  description: "Browse products, personalize items, and place demo orders to see local manufacturing in action.",
+  description:
+    "Browse products, personalize items, and place demo orders to see local manufacturing in action.",
 };
 
 export default function RootLayout({
@@ -24,13 +26,13 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display="
           rel="stylesheet"
         />
       </head>
       <body className={`${plusJakartaSans.variable} antialiased`}>
         <ServiceWorkerRegistration />
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

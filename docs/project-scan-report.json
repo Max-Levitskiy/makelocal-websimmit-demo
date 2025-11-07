@@ -1,1 +1,157 @@
-{"workflow_version":"1.2.0","timestamps":{"started":"2025-11-04T09:24:44.429668+00:00","last_updated":"2025-11-04T09:24:44.429668+00:00","completed":"2025-11-04T10:16:20.707465+00:00"},"mode":"initial_scan","scan_level":"deep","project_root":"/Users/max/git/Max-Levitskiy/makelocal-websimmit-demo","output_folder":"/Users/max/git/Max-Levitskiy/makelocal-websimmit-demo/docs","completed_steps":[{"step":"step_1","status":"completed","timestamp":"2025-11-04T10:11:30.756492+00:00","summary":"Classified as monolith with 1 parts"},{"step":"step_2","status":"completed","timestamp":"2025-11-04T10:14:18.293332+00:00","summary":"Found 4 existing docs (README, STYLEGUIDE, API notes, DESCRIPTION directive)"},{"step":"step_3","status":"completed","timestamp":"2025-11-04T10:14:28.300388+00:00","summary":"Tech stack: Next.js 16 / React 19 with Tailwind"},{"step":"step_4","status":"completed","timestamp":"2025-11-04T10:14:36.611903+00:00","summary":"Conditional analysis complete, outputs pending"},{"step":"step_5","status":"completed","timestamp":"2025-11-04T10:14:53.421247+00:00","summary":"Source tree documented"},{"step":"step_6","status":"completed","timestamp":"2025-11-04T10:15:12.058293+00:00","summary":"Dev setup and commands documented"},{"step":"step_7","status":"skipped","timestamp":"2025-11-04T10:15:55.046960+00:00","summary":"Single-part project; integration architecture not applicable"},{"step":"step_8","status":"completed","timestamp":"2025-11-04T10:16:00.007128+00:00","summary":"Architecture doc written"},{"step":"step_9","status":"completed","timestamp":"2025-11-04T10:16:04.549428+00:00","summary":"Supporting docs generated (overview, components, dev, api, data)"},{"step":"step_10","status":"completed","timestamp":"2025-11-04T10:16:08.987074+00:00","summary":"Master index generated"},{"step":"step_11","status":"completed","timestamp":"2025-11-04T10:16:13.784349+00:00","summary":"Validation complete; no incomplete docs"},{"step":"step_12","status":"completed","timestamp":"2025-11-04T10:16:20.707318+00:00","summary":"Workflow complete"}],"current_step":"completed","findings":{"project_classification":"monolith, 1 parts, Next.js","existing_docs":["README.md","STYLEGUIDE.md","docs/makelocal-api/anonymousAuth.md","docs/makelocal-api/orderDraft.md"],"user_context":"DESCRIPTION.md is central planning reference.","technology_stack":[{"category":"Framework","technology":"Next.js","version":"16.0.1","justification":"Detected in package.json dependencies"},{"category":"UI","technology":"React","version":"19.2.0","justification":"Detected in package.json"},{"category":"Styling","technology":"Tailwind CSS","version":"4.x","justification":"postcss config references @tailwindcss/postcss"},{"category":"Language","technology":"TypeScript","version":"5.x","justification":"tsconfig.json present"}],"architecture_pattern":"Next.js App Router SPA","ui_component_status":"design + src/app/components to document later","requires_api_scan":true,"requires_data_models":true,"source_tree":"App router with globals/layout/page only currently","dev_commands":["bun dev","bun run lint","bun run format","bun run build","bun start"],"missing_docs":[]},"outputs_generated":["project-scan-report.json","source-tree-analysis.md","development-guide.md","architecture.md","project-overview.md","component-inventory.md","development-guide.md","api-contracts.md","data-models.md","index.md"],"resume_instructions":"Starting from step 1","last_updated":"2025-11-04T10:16:20.707467+00:00","project_types":[{"part_id":"root","project_type_id":"web","display_name":"Web Application (Next.js)"}]}
+{
+  "workflow_version": "1.2.0",
+  "timestamps": {
+    "started": "2025-11-04T09:24:44.429668+00:00",
+    "last_updated": "2025-11-04T09:24:44.429668+00:00",
+    "completed": "2025-11-04T10:16:20.707465+00:00"
+  },
+  "mode": "initial_scan",
+  "scan_level": "deep",
+  "project_root": "/Users/max/git/Max-Levitskiy/makelocal-websimmit-demo",
+  "output_folder": "/Users/max/git/Max-Levitskiy/makelocal-websimmit-demo/docs",
+  "completed_steps": [
+    {
+      "step": "step_1",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:11:30.756492+00:00",
+      "summary": "Classified as monolith with 1 parts"
+    },
+    {
+      "step": "step_2",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:14:18.293332+00:00",
+      "summary": "Found 4 existing docs (README, STYLEGUIDE, API notes, DESCRIPTION directive)"
+    },
+    {
+      "step": "step_3",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:14:28.300388+00:00",
+      "summary": "Tech stack: Next.js 16 / React 19 with Tailwind"
+    },
+    {
+      "step": "step_4",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:14:36.611903+00:00",
+      "summary": "Conditional analysis complete, outputs pending"
+    },
+    {
+      "step": "step_5",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:14:53.421247+00:00",
+      "summary": "Source tree documented"
+    },
+    {
+      "step": "step_6",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:15:12.058293+00:00",
+      "summary": "Dev setup and commands documented"
+    },
+    {
+      "step": "step_7",
+      "status": "skipped",
+      "timestamp": "2025-11-04T10:15:55.046960+00:00",
+      "summary": "Single-part project; integration architecture not applicable"
+    },
+    {
+      "step": "step_8",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:16:00.007128+00:00",
+      "summary": "Architecture doc written"
+    },
+    {
+      "step": "step_9",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:16:04.549428+00:00",
+      "summary": "Supporting docs generated (overview, components, dev, api, data)"
+    },
+    {
+      "step": "step_10",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:16:08.987074+00:00",
+      "summary": "Master index generated"
+    },
+    {
+      "step": "step_11",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:16:13.784349+00:00",
+      "summary": "Validation complete; no incomplete docs"
+    },
+    {
+      "step": "step_12",
+      "status": "completed",
+      "timestamp": "2025-11-04T10:16:20.707318+00:00",
+      "summary": "Workflow complete"
+    }
+  ],
+  "current_step": "completed",
+  "findings": {
+    "project_classification": "monolith, 1 parts, Next.js",
+    "existing_docs": [
+      "README.md",
+      "STYLEGUIDE.md",
+      "docs/makelocal-api/anonymousAuth.md",
+      "docs/makelocal-api/orderDraft.md"
+    ],
+    "user_context": "DESCRIPTION.md is central planning reference.",
+    "technology_stack": [
+      {
+        "category": "Framework",
+        "technology": "Next.js",
+        "version": "16.0.1",
+        "justification": "Detected in package.json dependencies"
+      },
+      {
+        "category": "UI",
+        "technology": "React",
+        "version": "19.2.0",
+        "justification": "Detected in package.json"
+      },
+      {
+        "category": "Styling",
+        "technology": "Tailwind CSS",
+        "version": "4.x",
+        "justification": "postcss config references @tailwindcss/postcss"
+      },
+      {
+        "category": "Language",
+        "technology": "TypeScript",
+        "version": "5.x",
+        "justification": "tsconfig.json present"
+      }
+    ],
+    "architecture_pattern": "Next.js App Router SPA",
+    "ui_component_status": "design + src/app/components to document later",
+    "requires_api_scan": true,
+    "requires_data_models": true,
+    "source_tree": "App router with globals/layout/page only currently",
+    "dev_commands": [
+      "bun dev",
+      "bun run lint",
+      "bun run format",
+      "bun run build",
+      "bun start"
+    ],
+    "missing_docs": []
+  },
+  "outputs_generated": [
+    "project-scan-report.json",
+    "source-tree-analysis.md",
+    "development-guide.md",
+    "architecture.md",
+    "project-overview.md",
+    "component-inventory.md",
+    "development-guide.md",
+    "api-contracts.md",
+    "data-models.md",
+    "index.md"
+  ],
+  "resume_instructions": "Starting from step 1",
+  "last_updated": "2025-11-04T10:16:20.707467+00:00",
+  "project_types": [
+    {
+      "part_id": "root",
+      "project_type_id": "web",
+      "display_name": "Web Application (Next.js)"
+    }
+  ]
+}

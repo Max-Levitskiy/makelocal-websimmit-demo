@@ -1,0 +1,176 @@
+{
+  "products": [
+    {
+      "id": "40a01a16-1e76-4bfd-8305-ac6a04bb5f50",
+      "slug": "personalized-keychain",
+      "name": "Personalized Keychain",
+      "description": "A stylish and durable keychain, personalized with your initials.",
+      "basePrice": 0.0,
+      "estimatedPrintTime": "20 min",
+      "material": "PLA",
+      "images": ["/products/keychain.webp"],
+      "personalization": {
+        "colorSelect": {
+          "label": "Choose Color",
+          "required": true,
+          "options": [
+            { "id": "red", "name": "Red", "hex": "#ef4444", "available": true },
+            {
+              "id": "blue",
+              "name": "Blue",
+              "hex": "#3b82f6",
+              "available": true
+            },
+            {
+              "id": "green",
+              "name": "Green",
+              "hex": "#10b981",
+              "available": true
+            },
+            {
+              "id": "yellow",
+              "name": "Yellow",
+              "hex": "#f59e0b",
+              "available": true
+            },
+            {
+              "id": "black",
+              "name": "Black",
+              "hex": "#1f2937",
+              "available": true
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "sku": "KEY-001",
+        "weight": 15,
+        "dimensions": {
+          "width": 50,
+          "height": 30,
+          "depth": 5
+        }
+      }
+    },
+    {
+      "id": "cable-clip-002",
+      "slug": "cable-clip",
+      "name": "Cable Clip",
+      "description": "Keep your cables organized with this practical cable clip.",
+      "basePrice": 3.0,
+      "estimatedPrintTime": "15 min",
+      "material": "PLA",
+      "images": ["/products/clip.webp"],
+      "personalization": {
+        "textInput": {
+          "label": "Label Text (Optional)",
+          "placeholder": "e.g., USB-C",
+          "required": false,
+          "minLength": 0,
+          "maxLength": 10,
+          "validation": "^[A-Za-z0-9\\s\\-]*$",
+          "errorMessage": "Only letters, numbers, spaces, and hyphens allowed"
+        },
+        "colorSelect": {
+          "label": "Choose Color",
+          "required": true,
+          "options": [
+            {
+              "id": "white",
+              "name": "White",
+              "hex": "#ffffff",
+              "available": true
+            },
+            {
+              "id": "black",
+              "name": "Black",
+              "hex": "#1f2937",
+              "available": true
+            },
+            {
+              "id": "gray",
+              "name": "Gray",
+              "hex": "#6b7280",
+              "available": true
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "sku": "CLIP-002",
+        "weight": 8,
+        "dimensions": {
+          "width": 40,
+          "height": 20,
+          "depth": 10
+        }
+      }
+    },
+    {
+      "id": "phone-stand-003",
+      "slug": "phone-stand",
+      "name": "Mini Phone Stand",
+      "description": "A compact and adjustable phone stand for your desk.",
+      "basePrice": 8.0,
+      "estimatedPrintTime": "30 min",
+      "material": "PLA",
+      "images": ["/products/stand.webp"],
+      "personalization": {
+        "textInput": {
+          "label": "Name or Text",
+          "placeholder": "e.g., Your Name",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 12,
+          "validation": "^[A-Za-z0-9\\s]+$",
+          "errorMessage": "Only letters, numbers, and spaces allowed"
+        },
+        "colorSelect": {
+          "label": "Choose Color",
+          "required": true,
+          "options": [
+            {
+              "id": "blue",
+              "name": "Blue",
+              "hex": "#3b82f6",
+              "available": true
+            },
+            {
+              "id": "purple",
+              "name": "Purple",
+              "hex": "#a855f7",
+              "available": true
+            },
+            {
+              "id": "green",
+              "name": "Green",
+              "hex": "#10b981",
+              "available": true
+            },
+            {
+              "id": "orange",
+              "name": "Orange",
+              "hex": "#f97316",
+              "available": true
+            },
+            {
+              "id": "pink",
+              "name": "Pink",
+              "hex": "#ec4899",
+              "available": true
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "sku": "STAND-003",
+        "weight": 35,
+        "dimensions": {
+          "width": 80,
+          "height": 60,
+          "depth": 40
+        }
+      }
+    }
+  ]
+}
