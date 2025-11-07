@@ -44,7 +44,7 @@ development_status:
   1-5-implement-performance-optimization: backlog
   epic-1-retrospective: optional
 
-  epic-2: backlog
+  epic-2: contexted
   2-1-build-responsive-hero-section: backlog
   2-2-create-live-queue-banner-component: backlog
   2-3-build-product-catalog-grid: backlog
