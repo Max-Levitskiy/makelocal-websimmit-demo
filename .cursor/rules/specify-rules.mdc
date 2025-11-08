@@ -1,0 +1,29 @@
+# makelocal-websimmit-demo Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-11-06
+
+## Active Technologies
+
+- TypeScript 5.x with React 19.2.0 + Next.js 16.0.1 (App Router), Tailwind CSS 4.x, React 19.2.0 (001-product-cart-integration)
+
+## Project Structure
+
+```text
+src/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+TypeScript 5.x with React 19.2.0: Follow standard conventions
+
+## Recent Changes
+
+- 001-product-cart-integration: Added TypeScript 5.x with React 19.2.0 + Next.js 16.0.1 (App Router), Tailwind CSS 4.x, React 19.2.0
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

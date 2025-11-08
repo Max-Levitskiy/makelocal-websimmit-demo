@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { registerServiceWorker } from '@/lib/register-sw';
+import { useEffect } from "react";
+import { registerServiceWorker } from "@/lib/register-sw";
 
 /**
  * Client component to register service worker on app initialization
@@ -13,4 +13,3 @@ export function ServiceWorkerRegistration() {
 
   return null; // This component doesn't render anything
 }
-
