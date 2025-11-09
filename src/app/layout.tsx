@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { ClientLayout } from "@/components/shared/ClientLayout";
-import "./globals.css";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { ClientLayout } from "@/components/shared/ClientLayout";
+import { AuthProvider } from "@/lib/auth/auth-provider";
+import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -32,7 +33,9 @@ export default function RootLayout({
       </head>
       <body className={`${plusJakartaSans.variable} antialiased`}>
         <ServiceWorkerRegistration />
-        <ClientLayout>{children}</ClientLayout>
+        <AuthProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AuthProvider>
       </body>
     </html>
   );

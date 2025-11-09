@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CartIcon } from "@/components/cart/CartIcon";
+import { PhotoSlider } from "@/components/product/PhotoSlider";
 import { ProductConfig } from "@/components/product/ProductConfig";
 import { Button } from "@/components/shared/Button";
+import { MOCK_COORDINATOR_ID } from "@/lib/api/products-by-coordinator";
 import { useCartStore } from "@/lib/cart/cart-store";
-import { getProductBySlug } from "@/lib/products/products-loader";
+import { preloadProductPhotos } from "@/lib/photos/photo-fetcher";
+import { transformProduct } from "@/lib/products/product-transformer";
+import { useProductsStore } from "@/lib/products/products-store";
+import { useCoordinatorProducts } from "@/lib/products/use-coordinator-products";
 import type { Customizations } from "@/types/product";
 
 export default function ProductDetailPage() {
@@ -15,7 +20,46 @@ export default function ProductDetailPage() {
   const router = useRouter();
   const slug = params.slug as string;
 
+  // Get products from store
+  const {
+    getProductBySlug,
+    products: storeProducts,
+    setProducts,
+    setLoading: setStoreLoading,
+    setError: setStoreError,
+    shouldFetchProducts,
+  } = useProductsStore();
+
+  // Check if we need to fetch products
+  const shouldFetch = shouldFetchProducts();
+
+  // Use the enabled parameter to prevent unnecessary API calls
+  const {
+    products: apiProducts,
+    loading: apiLoading,
+    error: apiError,
+  } = useCoordinatorProducts(MOCK_COORDINATOR_ID, shouldFetch);
+
+  // Update store when products are fetched
+  useEffect(() => {
+    if (apiProducts.length > 0) {
+      const transformedProducts = apiProducts.map(transformProduct);
+      setProducts(transformedProducts);
+    }
+  }, [apiProducts, setProducts]);
+
+  // Update loading and error states
+  useEffect(() => {
+    setStoreLoading(apiLoading);
+  }, [apiLoading, setStoreLoading]);
+
+  useEffect(() => {
+    setStoreError(apiError);
+  }, [apiError, setStoreError]);
+
+  // Get product from store
   const product = getProductBySlug(slug);
+
   const [customizations, setCustomizations] = useState<Customizations>({});
   const [isValid, setIsValid] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -24,14 +68,74 @@ export default function ProductDetailPage() {
 
   const addItem = useCartStore((state) => state.addItem);
 
+  // Preload product photos when product is available
+  useEffect(() => {
+    if (product && product.images.length > 0) {
+      preloadProductPhotos(product.images);
+    }
+  }, [product]);
+
+  // Show loading state while products are being fetched
+  if (apiLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading product...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if API fetch failed
+  if (apiError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <span className="material-symbols-outlined text-5xl text-red-400 mb-4">
+            error
+          </span>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            Error Loading Products
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">{apiError}</p>
+          <Button onClick={() => router.push("/")}>Back to Catalog</Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show not found if product doesn't exist in store (after loading completes)
+  if (!product && storeProducts.length > 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <span className="material-symbols-outlined text-5xl text-slate-400 mb-4">
+            search_off
+          </span>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+            Product not found
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
+            This product may not be available or the link is incorrect.
+          </p>
+          <Button onClick={() => router.push("/")}>Back to Catalog</Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Still loading (products not yet in store)
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-            Product not found
-          </h1>
-          <Button onClick={() => router.push("/")}>Back to Catalog</Button>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading product...
+          </p>
         </div>
       </div>
     );
@@ -103,27 +207,38 @@ export default function ProductDetailPage() {
       {/* Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Image */}
+          {/* Product Images with Slider */}
           <div className="flex flex-col gap-4">
-            <div
-              className="w-full aspect-square bg-slate-200 dark:bg-slate-800 rounded-xl bg-cover bg-center"
-              style={{
-                backgroundImage: product.images[0]
-                  ? `url(${product.images[0]})`
-                  : undefined,
-              }}
-              role="img"
-              aria-label={product.name}
-            />
+            {product.images && product.images.length > 0 ? (
+              <PhotoSlider
+                images={product.images}
+                alt={product.name}
+                className="w-full aspect-square rounded-xl"
+              />
+            ) : (
+              <div
+                className="w-full aspect-square bg-slate-200 dark:bg-slate-800 rounded-xl flex items-center justify-center"
+                role="img"
+                aria-label={product.name}
+              >
+                <span className="material-symbols-outlined text-6xl text-slate-400">
+                  image
+                </span>
+              </div>
+            )}
 
             {/* Product Meta */}
             <div className="flex gap-2 flex-wrap">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full">
-                ~{product.estimatedPrintTime}
-              </span>
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full">
-                {product.material}
-              </span>
+              {product.estimatedPrintTime && (
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full">
+                  ~{product.estimatedPrintTime}
+                </span>
+              )}
+              {product.material && (
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full">
+                  {product.material}
+                </span>
+              )}
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 px-3 py-1 rounded-full">
                 €{product.basePrice.toFixed(2)}
               </span>

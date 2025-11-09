@@ -70,11 +70,32 @@ export async function createAnonymousSession(): Promise<AnonymousSession> {
       },
     );
 
+    console.log("[AnonymousAuth] Received response from API", {
+      hasToken: !!response.token,
+      hasUserId: !!response.userId,
+      isAnonymous: response.isAnonymous,
+      hasExpiresIn: response.expiresIn !== undefined,
+    });
+
+    // Validate response
+    if (!response.token) {
+      throw new Error("API response missing token");
+    }
+
+    // Use expiresIn from API if provided, otherwise default to 7 days (as per MakeLocal API docs)
+    const expiresIn = response.expiresIn ?? 7 * 24 * 60 * 60; // 7 days in seconds
+
     const session: AnonymousSession = {
       token: response.token,
-      expiresAt: Date.now() + response.expiresIn * 1000,
+      expiresAt: Date.now() + expiresIn * 1000,
       createdAt: Date.now(),
     };
+
+    console.log("[AnonymousAuth] Created session", {
+      userId: response.userId,
+      expiresIn,
+      expiresAt: new Date(session.expiresAt).toLocaleString(),
+    });
 
     // Store in localStorage
     storeSession(session);

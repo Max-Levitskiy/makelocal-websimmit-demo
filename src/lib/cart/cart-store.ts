@@ -73,17 +73,19 @@ export const useCartStore = create<CartStore>()(
       addItem: async (newItem) => {
         const state = get();
 
-        // Trigger anonymous auth on first cart interaction
+        // Session token is now managed by AuthProvider
+        // Get the token from the current stored session
         try {
           const token = await ensureValidSession();
           set({ sessionToken: token });
         } catch (error) {
           console.warn(
-            "[CartStore] Failed to create anonymous session, continuing in offline mode:",
+            "[CartStore] Failed to get session token, continuing in offline mode:",
             error,
           );
           // Continue without token - fallback to local-only mode
         }
+
         // Check for duplicate with same configuration
         const duplicate = findDuplicateItem(
           state as Cart,

@@ -24,16 +24,18 @@ export async function makeLocalRequest<T>(
 ): Promise<T> {
   const url = `${API_URL}${endpoint}`;
 
+  const requestConfig = {
+    ...options,
+    timeout: API_TIMEOUT,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+    credentials: "include" as RequestCredentials, // Include cookies for session management
+  };
+
   try {
-    const response = await fetchWithTimeout(url, {
-      ...options,
-      timeout: API_TIMEOUT,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      credentials: "include", // Include cookies for session management
-    });
+    const response = await fetchWithTimeout(url, requestConfig);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
