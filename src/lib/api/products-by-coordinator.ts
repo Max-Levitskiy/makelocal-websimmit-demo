@@ -3,11 +3,11 @@ import { makeLocalRequest } from "./makelocal-client";
 
 /**
  * Mock coordinator ID for development/testing
- * Reads from NEXT_PUBLIC_MOCK_COORDINATOR_ID environment variable
+ * Reads from NEXT_PUBLIC_COORDINATOR_ID environment variable
  * Falls back to a default UUID if not set
  */
 export const MOCK_COORDINATOR_ID =
-  process.env.NEXT_PUBLIC_MOCK_COORDINATOR_ID ??
+  process.env.NEXT_PUBLIC_COORDINATOR_ID ??
   "123e4567-e89b-12d3-a456-426614174000";
 
 /**
