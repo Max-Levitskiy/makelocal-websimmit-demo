@@ -61,6 +61,10 @@ export function ProductConfig({
     ? getFieldError(errors, "colorId")
     : undefined;
 
+  useEffect(() => {
+    console.log("product", product);
+  }, [product]);
+
   return (
     <div className="flex flex-col gap-6">
       {/* Text Input Configuration */}

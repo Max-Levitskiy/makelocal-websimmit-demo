@@ -1,12 +1,65 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { CartIcon } from "@/components/cart/CartIcon";
 import { ProductCard } from "@/components/product/ProductCard";
-import { getAllProducts } from "@/lib/products/products-loader";
+import { OrderStatusMarquee } from "@/components/shared/OrderStatusMarquee";
+import { MOCK_COORDINATOR_ID } from "@/lib/api/products-by-coordinator";
+import { preloadProductPhotos } from "@/lib/photos/photo-fetcher";
+import { transformProduct } from "@/lib/products/product-transformer";
+import { useProductsStore } from "@/lib/products/products-store";
+import { useCoordinatorProducts } from "@/lib/products/use-coordinator-products";
 
 export default function Home() {
-  const products = getAllProducts();
+  // Check if we should fetch products (only if store is empty)
+  const { products: existingProducts, shouldFetchProducts } =
+    useProductsStore();
+  const shouldFetch = shouldFetchProducts() || existingProducts.length === 0;
+
+  const {
+    products: apiProducts,
+    loading,
+    error,
+  } = useCoordinatorProducts(MOCK_COORDINATOR_ID, shouldFetch);
+
+  const {
+    setProducts,
+    setLoading,
+    setError,
+    products: storeProducts,
+  } = useProductsStore();
+
+  // Update store whenever products are fetched
+  useEffect(() => {
+    if (apiProducts.length > 0) {
+      const transformedProducts = apiProducts.map(transformProduct);
+      setProducts(transformedProducts);
+
+      // Preload photos for all products (background loading)
+      transformedProducts.forEach((product) => {
+        if (product.images.length > 0) {
+          preloadProductPhotos(product.images);
+        }
+      });
+    }
+  }, [apiProducts, setProducts]);
+
+  // Update loading state
+  useEffect(() => {
+    setLoading(loading);
+  }, [loading, setLoading]);
+
+  // Update error state
+  useEffect(() => {
+    setError(error);
+  }, [error, setError]);
+
+  // Use products from store (which are already transformed)
+  const products =
+    storeProducts.length > 0
+      ? storeProducts
+      : apiProducts.map(transformProduct);
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark">
@@ -61,20 +114,7 @@ export default function Home() {
 
         {/* Live Queue Banner */}
         <div className="overflow-hidden py-3 bg-slate-200/50 dark:bg-slate-800/50 my-5">
-          <div className="inline-block whitespace-nowrap animate-marquee text-slate-700 dark:text-slate-300">
-            <span className="px-4">Now printing: Keychain for Sara (42%)</span>
-            <span className="text-primary px-4">•</span>
-            <span className="px-4">Next: Clip for João</span>
-            <span className="text-primary px-4">•</span>
-            <span className="px-4">Ready for pickup: TOKEN-7B3</span>
-            <span className="text-primary px-4">•</span>
-            <span className="px-4">Now printing: Keychain for Sara (42%)</span>
-            <span className="text-primary px-4">•</span>
-            <span className="px-4">Next: Clip for João</span>
-            <span className="text-primary px-4">•</span>
-            <span className="px-4">Ready for pickup: TOKEN-7B3</span>
-            <span className="text-primary px-4">•</span>
-          </div>
+          <OrderStatusMarquee />
         </div>
 
         {/* SectionHeader */}
@@ -86,11 +126,47 @@ export default function Home() {
         </h2>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 max-w-7xl mx-auto">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center p-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+              <p className="text-slate-600 dark:text-slate-400">
+                Loading products...
+              </p>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center p-12">
+            <div className="text-center max-w-md">
+              <div className="text-red-600 dark:text-red-400 mb-4">
+                <span className="material-symbols-outlined text-5xl">
+                  error
+                </span>
+                <h3 className="text-xl font-semibold mb-2">
+                  Error Loading Products
+                </h3>
+                <p className="text-sm">{error}</p>
+              </div>
+            </div>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="flex items-center justify-center p-12">
+            <div className="text-center">
+              <span className="material-symbols-outlined text-5xl text-slate-400 mb-4">
+                inventory_2
+              </span>
+              <p className="text-slate-600 dark:text-slate-400">
+                No products available at the moment.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 max-w-7xl mx-auto">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
 
         {/* "How It Works" Section */}
         <div className="px-4 py-10">

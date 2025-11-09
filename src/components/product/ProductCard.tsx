@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/shared/Button";
 import type { Product } from "@/types/product";
+import { PhotoSlider } from "./PhotoSlider";
 
 export interface ProductCardProps {
   product: Product;
@@ -11,17 +12,8 @@ export interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-900 p-4 shadow-sm dark:shadow-none">
-      {/* Product Image */}
-      <div
-        className="w-full aspect-square bg-slate-200 dark:bg-slate-800 rounded-lg bg-cover bg-center"
-        style={{
-          backgroundImage: product.images[0]
-            ? `url(${product.images[0]})`
-            : undefined,
-        }}
-        role="img"
-        aria-label={product.name}
-      />
+      {/* Product Images Slider */}
+      <PhotoSlider images={product.images} alt={product.name} />
 
       {/* Product Info */}
       <div className="flex flex-col gap-3 flex-1">
