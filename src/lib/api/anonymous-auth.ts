@@ -62,6 +62,11 @@ export function clearSession(): void {
  * Create anonymous session with MakeLocal API
  */
 export async function createAnonymousSession(): Promise<AnonymousSession> {
+  // Ensure this only runs on client side
+  if (typeof window === "undefined") {
+    throw new Error("Anonymous auth can only be created on client side");
+  }
+
   try {
     const response = await makeLocalRequest<AnonymousAuthResponse>(
       "/auth-anonymous",
@@ -71,10 +76,11 @@ export async function createAnonymousSession(): Promise<AnonymousSession> {
     );
 
     console.log("[AnonymousAuth] Received response from API", {
-      hasToken: !!response.token,
-      hasUserId: !!response.userId,
-      isAnonymous: response.isAnonymous,
-      hasExpiresIn: response.expiresIn !== undefined,
+      response,
+      hasToken: !!response?.token,
+      hasUserId: !!response?.userId,
+      isAnonymous: response?.isAnonymous,
+      hasExpiresIn: response?.expiresIn !== undefined,
     });
 
     // Validate response

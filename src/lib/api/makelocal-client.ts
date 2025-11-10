@@ -24,14 +24,30 @@ export async function makeLocalRequest<T>(
 ): Promise<T> {
   const url = `${API_URL}${endpoint}`;
 
+  // IMPORTANT: MakeLocal API doesn't allow Content-Type: application/json in preflight
+  // To avoid preflight, we use text/plain which is a "simple request" content type
+  // The server should be able to parse JSON sent as text/plain
+  const method = (options.method || "GET").toUpperCase();
+  const hasBody = ["POST", "PUT", "PATCH"].includes(method) && options.body;
+
+  const baseHeaders: Record<string, string> = {};
+
+  // Use text/plain to avoid CORS preflight (it's a "simple request" content type)
+  if (hasBody) {
+    baseHeaders["Content-Type"] = "text/plain;charset=UTF-8";
+  }
+
   const requestConfig = {
     ...options,
     timeout: API_TIMEOUT,
     headers: {
-      "Content-Type": "application/json",
+      ...baseHeaders,
       ...options.headers,
     },
-    credentials: "include" as RequestCredentials, // Include cookies for session management
+    // Critical: Include credentials for cross-domain cookie support
+    credentials: "include" as RequestCredentials,
+    // For cross-domain requests, we need to ensure mode is set correctly
+    mode: "cors" as RequestMode,
   };
 
   try {
@@ -47,7 +63,18 @@ export async function makeLocalRequest<T>(
       );
     }
 
+    // Check if response has content
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.warn("[makeLocalRequest] Non-JSON response received:", {
+        contentType,
+        status: response.status,
+      });
+    }
+
+    // Parse the original response
     const data = await response.json();
+
     return data;
   } catch (error) {
     // If already a MakeLocalAPIError, rethrow

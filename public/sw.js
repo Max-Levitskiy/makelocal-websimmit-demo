@@ -1,6 +1,6 @@
 // Service Worker for MakeLocal Web Summit Demo
 // Cache version for future cache invalidation
-const CACHE_VERSION = "v1.0.0";
+const CACHE_VERSION = "v1.0.1";
 const CACHE_NAME = `makelocal-cache-${CACHE_VERSION}`;
 
 // Install event handler
@@ -50,12 +50,35 @@ self.addEventListener("activate", (event) => {
 
 // Fetch event handler (minimal for Story 1.1, full caching logic deferred to Story 1.2)
 self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  // Bypass service worker for external API calls (MakeLocal API, etc.)
+  // This prevents CORS issues and ensures proper response handling
+  if (url.origin !== self.location.origin) {
+    // Let the browser handle external requests directly
+    return;
+  }
+
   // Basic fetch handler - network-first strategy
   // Full offline caching strategy will be implemented in Story 1.2
   event.respondWith(
-    fetch(event.request).catch(() => {
+    fetch(event.request).catch((error) => {
       // Fallback handling will be added in Story 1.2
       console.log("[Service Worker] Fetch failed for:", event.request.url);
+
+      // IMPORTANT: Always return a Response object to prevent "null response" errors
+      // Return a proper error response instead of undefined
+      return new Response(
+        JSON.stringify({
+          error: "Network request failed",
+          message: error.message,
+        }),
+        {
+          status: 503,
+          statusText: "Service Unavailable",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
     }),
   );
 });
