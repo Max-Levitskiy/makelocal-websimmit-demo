@@ -14,7 +14,7 @@ import {
   clearSession,
   ensureValidSession,
   getOrCreateSession,
-  getStoredSession,
+  hasValidSession,
 } from "@/lib/api/anonymous-auth";
 import type { AnonymousSession } from "@/types/api";
 
@@ -82,12 +82,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setError(null);
 
     try {
-      // First check if we have a valid stored session
-      const stored = getStoredSession();
-      if (stored) {
-        console.log("[AuthProvider] Found existing valid session");
-        setSession(stored);
-        setToken(stored.token);
+      // First check if we have a valid session in cookies
+      const hasSession = await hasValidSession();
+      if (hasSession) {
+        console.log("[AuthProvider] Found existing valid session in cookies");
+        // Create a session object for the valid cookie
+        const session: AnonymousSession = {
+          token: "cookie-based-session",
+          expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          createdAt: Date.now(),
+        };
+        setSession(session);
+        setToken(session.token);
         setIsInitialized(true);
         return;
       }
@@ -125,7 +131,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshSession = useCallback(async () => {
     try {
       const newToken = await ensureValidSession();
-      const newSession = getStoredSession();
+      // Create a session object for the valid cookie
+      const newSession: AnonymousSession = {
+        token: newToken,
+        expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        createdAt: Date.now(),
+      };
       setSession(newSession);
       setToken(newToken);
       setError(null);
@@ -155,7 +166,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Check session on route change
   useEffect(() => {
-    const { isInitialized, isLoading, token } = stateRef.current;
+    const { isInitialized, isLoading } = stateRef.current;
 
     if (!isInitialized) return;
 
@@ -163,19 +174,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (isLoading) return;
 
     // Check if session is still valid on route change
-    const stored = getStoredSession();
-    if (!stored) {
-      // Session expired or cleared, reinitialize
-      console.log(
-        `[AuthProvider] Session expired on route ${pathname}, reinitializing...`,
-      );
-      initializeSession();
-    } else if (stored.token !== token) {
-      // Session changed, update state
-      console.log("[AuthProvider] Session updated from storage");
-      setSession(stored);
-      setToken(stored.token);
-    }
+    const checkSession = async () => {
+      const hasSession = await hasValidSession();
+      if (!hasSession) {
+        // Session expired or cleared, reinitialize
+        console.log(
+          `[AuthProvider] Session expired on route ${pathname}, reinitializing...`,
+        );
+        initializeSession();
+      }
+    };
+    checkSession();
   }, [pathname, initializeSession]);
 
   // Refresh session periodically (every 5 minutes)
@@ -185,9 +194,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (!isInitialized || !session) return;
 
     const interval = setInterval(
-      () => {
-        const stored = getStoredSession();
-        if (!stored) {
+      async () => {
+        const hasSession = await hasValidSession();
+        if (!hasSession) {
           console.log(
             "[AuthProvider] Periodic check: Session expired, reinitializing...",
           );

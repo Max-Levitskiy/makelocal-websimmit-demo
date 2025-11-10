@@ -1,8 +1,5 @@
-import { getItem, removeItem, setItem } from "@/lib/utils/storage";
 import type { AnonymousAuthResponse, AnonymousSession } from "@/types/api";
 import { makeLocalRequest } from "./makelocal-client";
-
-const SESSION_STORAGE_KEY = "makelocal-session";
 
 /**
  * Check if session is expired
@@ -12,50 +9,33 @@ export function isSessionExpired(session: AnonymousSession): boolean {
 }
 
 /**
- * Get stored session from localStorage
+ * Check if session exists by trying to access protected endpoint
+ * API sets HttpOnly cookies automatically, we can't read them directly
  */
-export function getStoredSession(): AnonymousSession | null {
+export async function hasValidSession(): Promise<boolean> {
   try {
-    const session = getItem<AnonymousSession>(SESSION_STORAGE_KEY);
-
-    if (!session) {
-      return null;
-    }
-
-    // Check if expired
-    if (isSessionExpired(session)) {
-      removeItem(SESSION_STORAGE_KEY);
-      return null;
-    }
-
-    return session;
-  } catch (error) {
-    console.error("Failed to get stored session:", error);
-    return null;
-  }
-}
-
-/**
- * Store session in localStorage
- */
-export function storeSession(session: AnonymousSession): void {
-  try {
-    setItem(SESSION_STORAGE_KEY, session);
-  } catch (error) {
-    console.error("Failed to store session:", error);
-    throw error;
+    // Try to access a lightweight protected endpoint
+    // If it succeeds, we have a valid session
+    await makeLocalRequest("/auth-anonymous", {
+      method: "POST",
+    });
+    return true;
+  } catch {
+    return false;
   }
 }
 
 /**
  * Clear stored session
+ * Note: HttpOnly cookies set by API cannot be cleared from client-side JavaScript
+ * Session clearing should be handled server-side
  */
 export function clearSession(): void {
-  try {
-    removeItem(SESSION_STORAGE_KEY);
-  } catch (error) {
-    console.error("Failed to clear session:", error);
-  }
+  // HttpOnly cookies cannot be cleared from client-side JavaScript
+  // The session will naturally expire based on cookie TTL
+  console.log(
+    "[AnonymousAuth] Session clearing requested - HttpOnly cookies expire automatically",
+  );
 }
 
 /**
@@ -103,9 +83,7 @@ export async function createAnonymousSession(): Promise<AnonymousSession> {
       expiresAt: new Date(session.expiresAt).toLocaleString(),
     });
 
-    // Store in localStorage
-    storeSession(session);
-
+    // API automatically sets cookies via Set-Cookie header, no need to store manually
     return session;
   } catch (error) {
     console.error("Failed to create anonymous session:", error);
@@ -114,33 +92,44 @@ export async function createAnonymousSession(): Promise<AnonymousSession> {
 }
 
 /**
+ * Check if current session is valid by making a test API request
+ */
+export async function validateSession(): Promise<boolean> {
+  try {
+    // Make a lightweight API request to check if session is valid
+    // Using a simple endpoint that requires authentication
+    await makeLocalRequest("/auth-check", {
+      method: "GET",
+    });
+    return true;
+  } catch (error) {
+    console.log("[AnonymousAuth] Session validation failed:", error);
+    return false;
+  }
+}
+
+/**
  * Get or create anonymous session
  * Returns existing session if valid, otherwise creates new one
  */
 export async function getOrCreateSession(): Promise<AnonymousSession> {
-  // Check for existing session
-  const existing = getStoredSession();
-  if (existing) {
-    return existing;
+  // Check if we have a valid session in cookies
+  const hasSession = await hasValidSession();
+  if (hasSession) {
+    // Create a session object for the valid cookie
+    // We don't know the exact token, but API calls will work with cookies
+    const session: AnonymousSession = {
+      token: "cookie-based-session", // Placeholder token
+      expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // Assume 7 days
+      createdAt: Date.now(),
+    };
+    console.log("[AnonymousAuth] Found valid session in cookies");
+    return session;
   }
 
   // Create new session
+  console.log("[AnonymousAuth] No valid session found, creating new one");
   return await createAnonymousSession();
-}
-
-/**
- * Refresh anonymous session if expiring soon (within 1 hour)
- */
-export async function refreshSessionIfNeeded(
-  session: AnonymousSession,
-): Promise<AnonymousSession> {
-  const oneHourFromNow = Date.now() + 60 * 60 * 1000;
-
-  if (session.expiresAt < oneHourFromNow) {
-    return await createAnonymousSession();
-  }
-
-  return session;
 }
 
 /**
@@ -148,9 +137,9 @@ export async function refreshSessionIfNeeded(
  */
 export async function ensureValidSession(): Promise<string> {
   try {
+    // getOrCreateSession already validates the session via API
     const session = await getOrCreateSession();
-    const refreshedSession = await refreshSessionIfNeeded(session);
-    return refreshedSession.token;
+    return session.token;
   } catch (error) {
     console.error("Failed to ensure valid session:", error);
     throw error;
