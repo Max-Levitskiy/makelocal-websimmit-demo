@@ -84,7 +84,7 @@ export default function CheckoutPage() {
 
       // Redirect to MakeLocal after a brief delay
       // setTimeout(() => {
-      //   window.location.href = response.redirectUrl;
+      window.location.href = response.redirectUrl;
       // }, 2000);
     } catch (err) {
       console.error("Checkout failed:", err);

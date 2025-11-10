@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "webtree-makelocal-supabase.s3.eu-central-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "webtree-makelocal-supabase.s3.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
