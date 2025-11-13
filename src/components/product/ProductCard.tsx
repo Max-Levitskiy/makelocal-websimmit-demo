@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { ColorSwatch } from "@/components/product/ColorSwatch";
 import { Button } from "@/components/shared/Button";
 import type { Product } from "@/types/product";
+import Link from "next/link";
 import { PhotoSlider } from "./PhotoSlider";
 
 export interface ProductCardProps {
@@ -37,6 +38,39 @@ export function ProductCard({ product }: ProductCardProps) {
             €{product.basePrice.toFixed(2)}
           </span>
         </div>
+
+        {/* Color Options */}
+        {product.personalization.colorSelect &&
+          product.personalization.colorSelect.options.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                {product.personalization.colorSelect.options.length} color
+                {product.personalization.colorSelect.options.length !== 1
+                  ? "s"
+                  : ""}{" "}
+                available
+              </p>
+              <div className="flex gap-1 flex-wrap">
+                {product.personalization.colorSelect.options
+                  .slice(0, 6)
+                  .map((color) => (
+                    <ColorSwatch
+                      key={color.id}
+                      color={color}
+                      selected={false}
+                      onClick={() => {}} // Non-interactive in catalog view
+                      size="small"
+                      disabled={!color.available}
+                    />
+                  ))}
+                {product.personalization.colorSelect.options.length > 6 && (
+                  <div className="flex items-center justify-center size-6 rounded-full bg-slate-200 dark:bg-slate-700 text-xs font-medium text-slate-600 dark:text-slate-400">
+                    +{product.personalization.colorSelect.options.length - 6}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
       </div>
 
       {/* Action Button */}
